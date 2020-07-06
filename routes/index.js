@@ -6,6 +6,7 @@ const indexController = require("../controllers/indexController");
 router.get("/", indexController.read);
 router.get("/add", indexController.add);
 router.post("/", indexController.create);
-router.get("/edit", indexController.edit);
 router.post("/update", indexController.update);
+router.get("/export", indexController.export);
+
 module.exports = router;

@@ -15,11 +15,18 @@ var http = require("http").createServer(app);
 
 const index = require("./routes/index");
 
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DB_CONNECTION); // connect to our database
 
-
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected")
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set("view engine", "ejs"); // set up ejs for templating
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(logger('dev'));
 app.use(express.json());

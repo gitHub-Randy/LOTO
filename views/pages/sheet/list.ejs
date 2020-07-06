@@ -15,7 +15,9 @@
     </head>
     <div class="container">
         <h2>LOTO</h2>
-
+        <form action="/spanning/export" method="GET">
+            <button type="submit">Download Excel bestand</button>
+        </form>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -34,11 +36,10 @@
             <tbody>
                 <% data.forEach(function(data) { %>
                 <form action="/spanning/update" method="POST">
-
                     <tr>
-                        <th ><%= data.Nr %></th>
-                        <td><%= data.Datum %></td>
-                        <td><%= data.Name %></td>
+                        <th><%= data.nr %></th>
+                        <td><%= data.datum %></td>
+                        <td><%= data.naam %></td>
                         <td><%= data.object %></td>
                         <td><%= data.reden %></td>
                         <% if (data.datum_weg != "") { %>
@@ -46,18 +47,18 @@
                         <% } else{ %>
                         <td> <input type="date" class="form-control" id="date_away" name="date_away" /></td>
                         <% } %>
-                        <% if (data.Name_weg != "") { %>
-                        <td><%= data.Name_weg %></td>
+                        <% if (data.naam_weg != "") { %>
+                        <td><%= data.naam_weg %></td>
                         <% } else{ %>
                         <td> <input type="text" class="form-control" id="name_away" name="name_away" /></td>
                         <% } %>
                         <td><select name="spanning" id="spanning">
-                                <% if(data.Spanning == "Ja"){ %>
+                                <% if(data.spanning == "Ja"){ %>
                                 <option value="Ja" selected>Ja</option>
                                 <%} else { %>
                                 <option value="Ja">Ja</option>
                                 <% } %>
-                                <% if(data.Spanning == "Nee"){ %>
+                                <% if(data.spanning == "Nee"){ %>
                                 <option value="Nee" selected>Nee</option>
                                 <%} else { %>
                                 <option value="Nee">Nee</option>
@@ -65,9 +66,9 @@
                                 <% } %>
 
                             </select></td>
-                        <td> <button type="submit">Submit</button>
+                        <td> <button type="submit">Opslaan</button>
                         </td>
-                        <input type="hidden" class="form-control" id="nr" name="nr" value="<%= data.Nr %>">
+                        <input type="hidden" class="form-control" id="nr" name="nr" value="<%= data.nr %>">
                     </tr>
                 </form>
 
