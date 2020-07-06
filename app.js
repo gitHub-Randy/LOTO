@@ -33,7 +33,7 @@ app.use("/spanning", index);
 
 
 
-http.listen(process.env.HOST_PORT || 3000, () => {
+http.listen(process.env.HOST_PORT || 5000, () => {
   console.log("now listening...",)
 });
 module.exports = app;
