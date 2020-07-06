@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+
+</head>
+
+<body>
+
+    <head>
+        <%- include('../../partials/navbar.ejs') %>
+    </head>
+    <div class="container">
+        <h2>LOTO</h2>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Nr.</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Object</th>
+                    <th scope="col">Reden</th>
+                    <th scope="col">Datum weg</th>
+                    <th scope="col">Naam weg</th>
+                    <th scope="col">Spanning?</th>
+                    <th scope="col">Opslaan</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach(function(data) { %>
+                <form action="/spanning/update" method="POST">
+
+                    <tr>
+                        <th ><%= data.Nr %></th>
+                        <td><%= data.Datum %></td>
+                        <td><%= data.Name %></td>
+                        <td><%= data.object %></td>
+                        <td><%= data.reden %></td>
+                        <% if (data.datum_weg != "") { %>
+                        <td><%= data.datum_weg %></td>
+                        <% } else{ %>
+                        <td> <input type="date" class="form-control" id="date_away" name="date_away" /></td>
+                        <% } %>
+                        <% if (data.Name_weg != "") { %>
+                        <td><%= data.Name_weg %></td>
+                        <% } else{ %>
+                        <td> <input type="text" class="form-control" id="name_away" name="name_away" /></td>
+                        <% } %>
+                        <td><select name="spanning" id="spanning">
+                                <% if(data.Spanning == "Ja"){ %>
+                                <option value="Ja" selected>Ja</option>
+                                <%} else { %>
+                                <option value="Ja">Ja</option>
+                                <% } %>
+                                <% if(data.Spanning == "Nee"){ %>
+                                <option value="Nee" selected>Nee</option>
+                                <%} else { %>
+                                <option value="Nee">Nee</option>
+
+                                <% } %>
+
+                            </select></td>
+                        <td> <button type="submit">Submit</button>
+                        </td>
+                        <input type="hidden" class="form-control" id="nr" name="nr" value="<%= data.Nr %>">
+                    </tr>
+                </form>
+
+                <% }); %>
+
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+</html>

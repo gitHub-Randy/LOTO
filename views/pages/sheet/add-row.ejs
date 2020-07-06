@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link
+            rel="stylesheet"
+            href="//netdna.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link
+            rel="stylesheet"
+            href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
+    />
+</head>
+<body>
+<head>
+    <%- include('../../partials/navbar.ejs') %>.
+</head>
+<div class="container">
+    <h2>Rij toevoegen</h2>
+    <form action="/spanning" method="POST">
+        <div class="form-group">
+            <label for="nr">Nr.</label>
+            <input type="number" class="form-control" id="nr"  name="nr" readonly="true" value="<%= nr %>"/>
+        </div>
+        <div class="form-group">
+            <label for="date">Datum</label>
+            <input type="date" class="form-control" id="date"  name="date"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Naam</label>
+            <input type="text" class="form-control" id="name"  name="name"/>
+        </div>
+        <div class="form-group">
+            <label for="object">Object</label>
+            <input type="text" class="form-control" id="object"  name="object"/>
+        </div>
+        <div class="form-group">
+            <label for="reason">Reden</label>
+            <input type="text" class="form-control" id="reason"  name="reason"/>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>
