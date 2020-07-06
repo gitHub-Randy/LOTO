@@ -4,7 +4,7 @@ let moment = require("moment");
 const { type } = require("os");
 module.exports = {
   read(req, res) {
-    var wb = XLSX.readFile("LOTOLog.xlsx", {
+    var wb = XLSX.readFile(`${__dirname}/LOTOLog.xlsx`, {
       type: "array",
       cellDates: true,
       dateNF: "DD-MM-YYYY",
@@ -28,7 +28,7 @@ module.exports = {
   },
 
   add(req, res) {
-    var wb = XLSX.readFile("LOTOLog.xlsx");
+    var wb = XLSX.readFile(`${__dirname}/LOTOLog.xlsx`);
     var ws = wb.Sheets[wb.SheetNames[0]];
     let jsonData = XLSX.utils.sheet_to_json(ws);
     let numbers = [];
@@ -47,7 +47,7 @@ module.exports = {
 
   create(req, res) {
     console.log(req.body);
-    var wb = XLSX.readFile("LOTOLog.xlsx", {
+    var wb = XLSX.readFile(`${__dirname}/LOTOLog.xlsx`, {
       type: "array",
       cellDates: true,
       dateNF: "DD-MM-YYYY",
@@ -70,7 +70,7 @@ module.exports = {
       ],
       { origin: -1 }
     );
-    XLSX.writeFile(wb, "LOTOLog.xlsx", { dateNF: "DD-MM-YYYY" });
+    XLSX.writeFile(wb, `${__dirname}/LOTOLog.xlsx`, { dateNF: "DD-MM-YYYY" });
   },
 
   edit(req, res) {
@@ -80,7 +80,7 @@ module.exports = {
   update(req, res) {
     console.log(req.body);
 
-    var wb = XLSX.readFile("LOTOLog.xlsx");
+    var wb = XLSX.readFile(`${__dirname}/LOTOLog.xlsx`);
     var ws = wb.Sheets[wb.SheetNames[0]];
 
     let jsonData = XLSX.utils.sheet_to_json(ws);
@@ -101,6 +101,6 @@ module.exports = {
       var wbNew = XLSX.utils.book_new();
       var wsNew = XLSX.utils.json_to_sheet(jsonData);
       XLSX.utils.book_append_sheet(wbNew, wsNew, "Blad1");
-      XLSX.writeFile(wbNew, "LOTOLog.xlsx", { dateNF: "DD-MM-YYYY" });
+      XLSX.writeFile(wbNew, `${__dirname}/LOTOLog.xlsx`, { dateNF: "DD-MM-YYYY" });
   },
 };
