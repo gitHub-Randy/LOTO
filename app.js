@@ -32,8 +32,9 @@ app.use("/spanning", index);
 
 
 
+const PORT = process.env.PORT || 3000;
 
-http.listen(process.env.HOST_PORT || 5000, () => {
-  console.log("now listening...",)
+http.listen(PORT, () => {
+  console.log("now listening...", PORT)
 });
 module.exports = app;
