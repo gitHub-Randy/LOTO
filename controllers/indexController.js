@@ -36,6 +36,7 @@ module.exports = {
   },
 
   create(req, res) {
+    console.log(req.body)
     let row = new Row({
       nr: req.body.nr,
       datum: req.body.date.toString().split("-").reverse().join("/"),
@@ -44,7 +45,8 @@ module.exports = {
       reden: req.body.reason,
       datum_weg: "",
       naam_weg: "",
-      spanning: "Nee",
+      spanning: req.body.spanning,
+      definitief: false,
     });
     row.save().then((row) => {
       return res.redirect("/spanning");
@@ -99,6 +101,7 @@ module.exports = {
         row.naam_weg = req.body.name_away;
       }
       row.spanning = req.body.spanning;
+      row.definitief = true;
       row.save().then(() => {
         res.redirect("/spanning");
       });

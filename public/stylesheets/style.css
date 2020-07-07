@@ -1,8 +1,22 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.aboveTable{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-a {
-  color: #00B7FF;
+#filterInput{
+  width: 25vw;
+  height: 40px;
+}
+
+#sortTH{
+  width: 65px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#sortTH > i{
+  margin-top: 5px;
 }

@@ -31,6 +31,9 @@ const rowSchema = mongoose.Schema({
         type: String
 
     },
+    definitief: {
+        type: Boolean
+    }
   
 });
 

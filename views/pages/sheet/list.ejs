@@ -5,7 +5,14 @@
     <title></title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script>
+        function check() {
+            console.log(document.getElementById("date_away3").value.length)
+            console.log(document.getElementById("name_away3").value.length)
 
+        }
+    </script>
 </head>
 
 <body>
@@ -15,50 +22,64 @@
     </head>
     <div class="container">
         <h2>LOTO</h2>
-        <form action="/spanning/export" method="GET">
-            <button type="submit">Download Excel bestand</button>
-        </form>
-        <table class="table table-hover">
+        <div class="aboveTable">
+            <form action="/spanning/export" method="GET">
+                <button type="submit" class="btn btn-success" style="margin-bottom: 10px;">Download Excel
+                    bestand</button>
+            </form>
+            <input type="text" id="filterInput" onkeyup="filterObjects()" placeholder="Zoek naar objecten...">
+        </div>
+
+
+        <table class="table table-hover" id="dataTable">
             <thead>
                 <tr>
                     <th scope="col">Nr.</th>
                     <th scope="col">Datum</th>
                     <th scope="col">Naam</th>
-                    <th scope="col">Object</th>
+                    <th scope="col"  onclick="sortTable(2)">
+                        <div id="sortTH">
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                            Object
+                        </div>
+                      
+                    </th>
                     <th scope="col">Reden</th>
                     <th scope="col">Datum weg</th>
                     <th scope="col">Naam weg</th>
                     <th scope="col">Spanning?</th>
-                    <th scope="col">Opslaan</th>
+                    <th scope="col"> </th>
 
                 </tr>
             </thead>
             <tbody>
-                <% data.forEach(function(data) { %>
+                <% for (let i = 0; i < data.length; i++) { %>
                 <form action="/spanning/update" method="POST">
                     <tr>
-                        <th><%= data.nr %></th>
-                        <td><%= data.datum %></td>
-                        <td><%= data.naam %></td>
-                        <td><%= data.object %></td>
-                        <td><%= data.reden %></td>
-                        <% if (data.datum_weg != "") { %>
-                        <td><%= data.datum_weg %></td>
+                        <th><%= data[i].nr %></th>
+                        <td><%= data[i].datum %></td>
+                        <td><%= data[i].naam %></td>
+                        <td><%= data[i].object %></td>
+                        <td onclick="check()"><%= data[i].reden %></td>
+                        <% if (data[i].datum_weg != "") { %>
+                        <td><%= data[i].datum_weg %></td>
                         <% } else{ %>
-                        <td> <input type="date" class="form-control" id="date_away" name="date_away" /></td>
+                        <td> <input type="date" class="form-control" id="date_away<%= i %>" name="date_away"
+                                onchange="checkSelect(<%= i %>)" /></td>
                         <% } %>
-                        <% if (data.naam_weg != "") { %>
-                        <td><%= data.naam_weg %></td>
+                        <% if (data[i].naam_weg != "") { %>
+                        <td><%= data[i].naam_weg %></td>
                         <% } else{ %>
-                        <td> <input type="text" class="form-control" id="name_away" name="name_away" /></td>
+                        <td> <input type="text" class="form-control" id="name_away<%= i %>" name="name_away"
+                                onchange="checkSelect(<%= i %>)" /></td>
                         <% } %>
-                        <td><select name="spanning" id="spanning">
-                                <% if(data.spanning == "Ja"){ %>
+                        <td><select name="spanning" id="spanning<%= i %>" disabled="true">
+                                <% if(data[i].spanning == "Ja"){ %>
                                 <option value="Ja" selected>Ja</option>
                                 <%} else { %>
                                 <option value="Ja">Ja</option>
                                 <% } %>
-                                <% if(data.spanning == "Nee"){ %>
+                                <% if(data[i].spanning == "Nee"){ %>
                                 <option value="Nee" selected>Nee</option>
                                 <%} else { %>
                                 <option value="Nee">Nee</option>
@@ -66,18 +87,118 @@
                                 <% } %>
 
                             </select></td>
-                        <td> <button type="submit">Opslaan</button>
+                        <% if(data[i].definitief == false) { %>
+                        <td> <button type="submit" class="btn btn-danger">Definitef</button>
+
+                            <% } %>
                         </td>
-                        <input type="hidden" class="form-control" id="nr" name="nr" value="<%= data.nr %>">
+                        <input type="hidden" class="form-control" id="nr" name="nr" value="<%= data[i].nr %>">
                     </tr>
                 </form>
 
-                <% }); %>
+                <% }; %>
 
             </tbody>
         </table>
 
     </div>
 </body>
+<script>
+    function checkSelect(id) {
+        console.log(id)
+        if (document.getElementById(`date_away${id}`).value == 0 || document.getElementById(`name_away${id}`).value.length == 0) {
+            document.getElementById(`spanning${id}`).disabled = true;
+
+        } else {
+            document.getElementById(`spanning${id}`).disabled = false;
+
+        }
+
+    }
+
+
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("dataTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                console.log(x)
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+
+    }
+
+
+    function filterObjects() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("filterInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+</script>
 
 </html>
