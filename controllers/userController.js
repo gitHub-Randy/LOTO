@@ -20,7 +20,6 @@ module.exports = {
           res.redirect("/spanning");
         }
       })
-
       .catch((err) => next(err));
   },
 
