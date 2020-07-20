@@ -28,6 +28,7 @@ module.exports = {
       var date = row.datum;
       var newdate = date.split("/").reverse().join("-");
       row.datum = newdate;
+      
       return res.render("pages/sheet/update-row.ejs", {
         data: row,
       });

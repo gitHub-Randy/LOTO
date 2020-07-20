@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(errorHandler);
 
-app.use(session({secret: 'ssshhhhh'}));
+app.use(session({secret: process.env.SESSION_KEY}));
 
 app.use(logger('dev'));
 app.use(express.json());
