@@ -6,7 +6,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 var logger = require('morgan');
+const cors = require("cors");
 
+const errorHandler = require("./helpers/error-helper");
+const session = require("express-session");
 
 
 var app = express();
@@ -14,6 +17,7 @@ var app = express();
 var http = require("http").createServer(app);
 
 const index = require("./routes/index");
+const user = require("./routes/users");
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB_CONNECTION); // connect to our database
@@ -27,12 +31,17 @@ db.once('open', function() {
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs"); // set up ejs for templating
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(errorHandler);
+
+app.use(session({secret: 'ssshhhhh'}));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/admin", user);
 
 app.use("/spanning", index);
 

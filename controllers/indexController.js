@@ -3,14 +3,33 @@ let XLSX = require("xlsx");
 let moment = require("moment");
 let Row = require("../models/row");
 const row = require("../models/row");
+const { isBuffer } = require("util");
 module.exports = {
-  
   read(req, res) {
     Row.find().then((rows) => {
       let formattedData = rows;
-      console.log(formattedData);
+      sess = req.session;
+      if (sess.user) {
+        console.log("USEEEEEEEEEEEEEEER");
+        console.log(sess.user);
+        return res.render("pages/sheet/list.ejs", {
+          data: formattedData,
+          user: sess.user,
+        });
+      }
       return res.render("pages/sheet/list.ejs", {
         data: formattedData,
+      });
+    });
+  },
+
+  editRow(req, res) {
+    Row.findOne({ nr: req.params.nr }).then((row) => {
+      var date = row.datum;
+      var newdate = date.split("/").reverse().join("-");
+      row.datum = newdate;
+      return res.render("pages/sheet/update-row.ejs", {
+        data: row,
       });
     });
   },
@@ -36,7 +55,7 @@ module.exports = {
   },
 
   create(req, res) {
-    console.log(req.body)
+    console.log(req.body);
     let row = new Row({
       nr: req.body.nr,
       datum: req.body.date.toString().split("-").reverse().join("/"),
@@ -56,11 +75,10 @@ module.exports = {
   export(req, res) {
     var wb = XLSX.utils.book_new();
     var ws_name = "Blad1";
-    let ws_data = []
+    let ws_data = [];
 
     Row.find()
       .then((rows) => {
-
         rows.forEach((row) => {
           ws_data.push({
             Nr: row.nr,
@@ -76,7 +94,7 @@ module.exports = {
         return ws_data;
       })
       .then((ws_data) => {
-        console.log(ws_data)
+        console.log(ws_data);
         var ws = XLSX.utils.json_to_sheet(ws_data);
         XLSX.utils.book_append_sheet(wb, ws, ws_name);
         XLSX.writeFile(wb, "LOTOLog.xlsx");
@@ -90,6 +108,20 @@ module.exports = {
   update(req, res) {
     console.log(req.body);
     Row.findOne({ nr: req.body.nr }).then((row) => {
+      if (req.body.date) {
+        row.datum = req.body.date.toString().split("-").reverse().join("/");
+      }
+      if (req.body.name) {
+        row.naam = req.body.name;
+      }
+      if (req.body.object) {
+        row.object = req.body.object;
+
+      }
+      if (req.body.reason) {
+        row.reden = req.body.reason;
+
+      }
       if (req.body.date_away) {
         row.datum_weg = req.body.date_away
           .toString()
@@ -101,7 +133,6 @@ module.exports = {
         row.naam_weg = req.body.name_away;
       }
       row.spanning = req.body.spanning;
-      row.definitief = true;
       row.save().then(() => {
         res.redirect("/spanning");
       });

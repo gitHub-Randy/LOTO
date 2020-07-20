@@ -34,15 +34,19 @@
         <table class="table table-hover" id="dataTable">
             <thead>
                 <tr>
+                    <th><% if(locals.user){ %>
+                        Wijzigen
+                        <% } %></th>
+
                     <th scope="col">Nr.</th>
                     <th scope="col">Datum</th>
                     <th scope="col">Naam</th>
-                    <th scope="col"  onclick="sortTable(2)">
+                    <th scope="col" onclick="sortTable(2)">
                         <div id="sortTH">
                             <i class="fa fa-sort" aria-hidden="true"></i>
                             Object
                         </div>
-                      
+
                     </th>
                     <th scope="col">Reden</th>
                     <th scope="col">Datum weg</th>
@@ -54,8 +58,16 @@
             </thead>
             <tbody>
                 <% for (let i = 0; i < data.length; i++) { %>
-                <form action="/spanning/update" method="POST">
                     <tr>
+
+                <% if(locals.user){ %>
+                <form action="/spanning/updateRow/<%= data[i].nr %>" method="GET">
+                    <td><button type="submit" class="btn btn-warning">Wijzigen</button></td>
+
+                </form>
+                <% } %>
+                <form action="/spanning/update" method="POST">
+
                         <th><%= data[i].nr %></th>
                         <td><%= data[i].datum %></td>
                         <td><%= data[i].naam %></td>
