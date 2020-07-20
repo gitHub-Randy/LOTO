@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 var logger = require('morgan');
 const cors = require("cors");
 
-const errorHandler = require("./helpers/error-helper");
 const session = require("express-session");
 
 
@@ -32,7 +31,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs"); // set up ejs for templating
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
-app.use(errorHandler);
 
 app.use(session({secret: process.env.SESSION_KEY}));
 
