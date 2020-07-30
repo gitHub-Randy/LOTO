@@ -34,9 +34,11 @@
         <table class="table table-hover" id="dataTable">
             <thead>
                 <tr>
-                    <th><% if(locals.user){ %>
-                        Wijzigen
-                        <% } %></th>
+                  <% if(locals.user){ %>
+                    <th> Wijzigen </th>
+                        <% } else{ %>
+                       <%  }%>
+                        
 
                     <th scope="col">Nr.</th>
                     <th scope="col">Datum</th>
